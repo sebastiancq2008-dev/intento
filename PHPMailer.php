@@ -5582,5 +5582,15 @@ class PHPMailer
     public function setOAuth(OAuthTokenProvider $oauth)
     {
         $this->oauth = $oauth;
+        FROM php:8.2-apache
+
+# Instalar la extensión necesaria para SMTP
+RUN docker-php-ext-install sockets
+
+# Copiar todos los archivos al servidor
+COPY . /var/www/html/
+
+# Dar permisos correctos
+RUN chown -R www-data:www-data /var/www/html
     }
 }
