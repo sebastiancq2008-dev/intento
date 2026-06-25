@@ -21,7 +21,7 @@ $host = "smtp.gmail.com";
 $puerto = 587;
 $seguridad = "tls";
 $correo_emisor = "sebastiancq2008@gmail.com";
-$clave_app = "PONER_AQUI_TU_CLAVE_DE_16_DIGITOS"; // ← PASO OBLIGATORIO
+$clave_app = "quesada20"; // ← PASO OBLIGATORIO
 $correo_destino = "sebastiancq2008@gmail.com";
 
 $asunto = "Nuevo ingreso - Tomza Taller";
