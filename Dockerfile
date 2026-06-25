@@ -1,11 +1,16 @@
 FROM php:8.2-apache
 
-# Habilitar extensiones necesarias para SMTP
-RUN docker-php-ext-install sockets openssl
+# Instalar servicio de envío de correos
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sendmail \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copiar archivos
+# Habilitar extensiones necesarias
+RUN docker-php-ext-install sockets
+
+# Copiar todos los archivos del proyecto
 COPY . /var/www/html/
 
-# Permisos
+# Asignar permisos correctos
 RUN chown -R www-data:www-data /var/www/html
 RUN a2enmod rewrite
