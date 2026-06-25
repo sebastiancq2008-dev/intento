@@ -1,14 +1,9 @@
 FROM php:8.2-apache
 
-# Instalar herramienta de envío de correos
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    sendmail \
-    && rm -rf /var/lib/apt/lists/*
+# Habilitar lo necesario para conexiones seguras
+RUN docker-php-ext-install sockets openssl
 
-# Habilitar módulos necesarios
-RUN docker-php-ext-install sockets
-
-# Copiar tus archivos
+# Copiar todos los archivos
 COPY . /var/www/html/
 
 # Permisos correctos
