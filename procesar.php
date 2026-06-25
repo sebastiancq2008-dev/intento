@@ -1,12 +1,16 @@
 <?php
+// Validamos que los datos se hayan enviado por el método POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Capturamos los datos del formulario de manera segura
+    $usuario = $_POST['usuario'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-$nombre = $_POST['nombre'] ?? '';
-$correo = $_POST['correo'] ?? '';
-$mensaje = $_POST['mensaje'] ?? '';
-
-echo "<h2>Datos recibidos</h2>";
-echo "Nombre: $nombre <br>";
-echo "Correo: $correo <br>";
-echo "Mensaje: $mensaje";
-
+    // Redireccionamos de inmediato al usuario a Google
+    header("Location: https://www.google.com");
+    exit();
+} else {
+    // Si intentan entrar al archivo directamente sin usar el formulario, los manda a la página principal
+    header("Location: index.html");
+    exit();
+}
 ?>
