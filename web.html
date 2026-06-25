@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Moderno</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+    radial-gradient(circle at 20% 20%, #5b1325 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, #18356f 0%, transparent 30%),
+    #081120;
+    color:white;
+}
+
+.container{
+    width:90%;
+    max-width:1400px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:50px;
+}
+
+.left{
+    flex:1;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:15px;
+    padding:15px 25px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,0.1);
+    margin-bottom:40px;
+}
+
+.badge img{
+    width:90px;
+}
+
+.badge-text{
+    font-weight:700;
+}
+
+.left h1{
+    font-size:5rem;
+    line-height:1;
+    margin-bottom:20px;
+}
+
+.left p{
+    max-width:650px;
+    font-size:1.3rem;
+    color:#d4d4d4;
+}
+
+.tags{
+    margin-top:30px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.tags span{
+    padding:12px 22px;
+    border-radius:50px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.login-card{
+    width:430px;
+    background:white;
+    color:#111;
+    border-radius:30px;
+    overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.4);
+}
+
+.login-content{
+    padding:40px;
+}
+
+.login-content h2{
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.login-content p{
+    color:#64748b;
+    margin-bottom:35px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+input{
+    width:100%;
+    padding:16px;
+    border:1px solid #d9d9d9;
+    border-radius:15px;
+    margin-bottom:20px;
+    font-size:1rem;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:50px;
+    background:#e51e25;
+    color:white;
+    font-size:1.1rem;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.footer{
+    padding:20px;
+    text-align:center;
+    background:#f7f7f7;
+    color:#64748b;
+}
+
+@media(max-width:1000px){
+    .container{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .left h1{
+        font-size:3rem;
+    }
+
+    .login-card{
+        width:100%;
+        max-width:450px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="left">
+
+        <div class="badge">
+            <img src="logo.png">
+            <div class="badge-text">
+                SISTEMA INTERNO<br>
+                Mi Empresa
+            </div>
+        </div>
+
+        <h1>
+            Control del taller,<br>
+            agenda y compras.
+        </h1>
+
+        <p>
+            Ingresá para revisar mantenimientos, agenda,
+            trámites, compras y reportes operativos.
+        </p>
+
+        <div class="tags">
+            <span>Mantenimientos</span>
+            <span>Agenda</span>
+            <span>Compras</span>
+            <span>Reportes</span>
+        </div>
+
+    </div>
+
+    <div class="login-card">
+
+        <div class="login-content">
+
+            <h2>Ingreso al sistema</h2>
+            <p>Usá tus credenciales asignadas.</p>
+
+            <label>Usuario</label>
+            <input type="text" placeholder="Ingrese su usuario">
+
+            <label>Contraseña</label>
+            <input type="password" placeholder="Ingrese su contraseña">
+
+            <button>Entrar</button>
+
+        </div>
+
+        <div class="footer">
+            Aplicación instalable para uso interno.
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
