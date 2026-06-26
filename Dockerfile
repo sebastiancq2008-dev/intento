@@ -1,11 +1,13 @@
 FROM php:8.2-apache
 
-# Habilita lo necesario para conexiones seguras
+# Habilitar solo los módulos necesarios
 RUN docker-php-ext-install sockets openssl
 
-# Copia todos los archivos al servidor
+# Copiar todos los archivos
 COPY . /var/www/html/
 
-# Asigna permisos correctos
+# Asignar permisos correctos
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+
+# Activar reescritura de URLs
 RUN a2enmod rewrite
