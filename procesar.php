@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $usuario = trim($_POST["usuario"] ?? "");
 $password = trim($_POST["password"] ?? "");
 
-// Validar
+// Validar que no estén vacíos
 if ($usuario === "" || $password === "") {
     die("Faltan datos.");
 }
