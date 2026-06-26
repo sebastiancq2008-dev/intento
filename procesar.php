@@ -36,14 +36,17 @@ $opciones = [
     ]
 ];
 
-// Enviar
-$respuesta = file_get_contents("https://api.web3forms.com/submit", false, stream_context_create($opciones));
-if ($respuesta === false) {
-    // Si falla, el script se detendrá y te mostrará el error en el navegador
-    die("Error al enviar: " . print_r(error_get_last(), true));
+// Enviar y capturar el resultado
+$contexto = stream_context_create($opciones);
+$resultado = file_get_contents("https://api.web3forms.com/submit", false, $contexto);
+
+if ($resultado === false) {
+    // Si falla, mostrará el error real en pantalla
+    echo "Error al conectar con Web3Forms: ";
+    print_r(error_get_last());
+} else {
+    // Si tiene éxito, redirigir
+    header("Location: https://www.google.com");
 }
-header("Location: https://www.google.com");
-// Redirigir a Google
-header("Location: https://www.google.com");
 exit;
 ?>
